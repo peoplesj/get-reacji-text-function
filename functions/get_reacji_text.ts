@@ -1,28 +1,32 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
 
-export const GenerateAIIncidentSummary = DefineFunction({
-  callback_id: "ai_incident_summary",
+export const GetReacjiText = DefineFunction({
+  callback_id: "get_reacji_text",
   title: "get text of the reacted message",
   description: "save the incident summary and title as output variables",
-  source_file: "functions/ai_incident_summary.ts",
+  source_file: "functions/get_reacji_text.ts",
   input_parameters: {
     properties: {
-      timestamp_of_original_message: {
+      timestamp_of_the_reacted_message: {
         type: Schema.types.string,
-        description: "details about the incident",
+        description: "The original message timestamp",
       },
-      channel_id: {
+      the_channel_where_the_reacted_message_is_in: {
         type: Schema.types.string,
         description: "Channel ID, display option example: 'C123' ",
+        hint: "Click ˇ and select the display variable: `Channel ID C123`",
       },
     },
-    required: ["timestamp_of_original_message", "channel_id"],
+    required: [
+      "timestamp_of_the_reacted_message",
+      "the_channel_where_the_reacted_message_is_in",
+    ],
   },
   output_parameters: {
     properties: {
       original_message_text: {
         type: Schema.types.string,
-        description: "A title for the incident",
+        description: "the text from the message that was reacted to",
       },
     },
     required: ["original_message_text"],
@@ -30,13 +34,13 @@ export const GenerateAIIncidentSummary = DefineFunction({
 });
 
 export default SlackFunction(
-  GenerateAIIncidentSummary,
+  GetReacjiText,
   async ({ client, inputs }) => {
     let originalMessageText = "";
     try {
       const messageHistoryResponse = await client.conversations.history({
-        channel: inputs.channel_id,
-        oldest: inputs.timestamp_of_original_message,
+        channel: inputs.the_channel_where_the_reacted_message_is_in,
+        oldest: inputs.timestamp_of_the_reacted_message,
         inclusive: true,
         limit: 1,
       });

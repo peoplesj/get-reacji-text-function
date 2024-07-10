@@ -1,5 +1,5 @@
 import { Manifest } from "deno-slack-sdk/mod.ts";
-import { GenerateAIIncidentSummary } from "./functions/ai_incident_summary.ts";
+import { GetReacjiText } from "./functions/get_reacji_text.ts";
 
 /**
  * The app manifest contains the app's configuration. This
@@ -10,7 +10,7 @@ export default Manifest({
   name: "get-reacji-text",
   description: "get text of the reacted message",
   icon: "assets/default_new_app_icon.png",
-  functions: [GenerateAIIncidentSummary],
+  functions: [GetReacjiText],
   workflows: [],
   outgoingDomains: [],
   botScopes: [
