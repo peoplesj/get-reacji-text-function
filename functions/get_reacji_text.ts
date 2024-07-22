@@ -24,19 +24,19 @@ export const GetReacjiText = DefineFunction({
   },
   output_parameters: {
     properties: {
-      original_message_text: {
+      reacted_message_text: {
         type: Schema.types.string,
         description: "the text from the message that was reacted to",
       },
     },
-    required: ["original_message_text"],
+    required: ["reacted_message_text"],
   },
 });
 
 export default SlackFunction(
   GetReacjiText,
   async ({ client, inputs }) => {
-    let originalMessageText = "";
+    let reactedMessageText = "";
 
     try {
       const messageHistoryResponse = await client.conversations.history({
@@ -46,8 +46,8 @@ export default SlackFunction(
         limit: 1,
       });
       // The text from the message that was reacted to
-      originalMessageText = messageHistoryResponse.messages[0].text;
-      console.log("Original message:", originalMessageText);
+      reactedMessageText = messageHistoryResponse.messages[0].text;
+      console.log("Original message:", reactedMessageText);
     } catch (error) {
       console.error(
         "trying: client.conversations.history NOTE: Channel ID MUST BEGIN WITH A LETTER example: 'C123",
@@ -58,7 +58,7 @@ export default SlackFunction(
     // By specifying output variables, they can be utilized in the subsequent steps of the workflow.
     return {
       outputs: {
-        original_message_text: originalMessageText,
+        reacted_message_text: reactedMessageText,
       },
     };
   },
