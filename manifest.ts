@@ -8,7 +8,7 @@ import { GetReacjiText } from "./functions/get_reacji_text.ts";
  */
 export default Manifest({
   name: "get-reacji-text",
-  description: "get text of the reacted message",
+  description: "get the text of the reacted message",
   icon: "assets/default_new_app_icon.png",
   functions: [GetReacjiText],
   workflows: [],

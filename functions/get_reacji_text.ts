@@ -2,8 +2,8 @@ import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
 
 export const GetReacjiText = DefineFunction({
   callback_id: "get_reacji_text",
-  title: "get text of the reacted message",
-  description: "save the incident summary and title as output variables",
+  title: "get the text of the reacted message",
+  description: "save the text of the reacted message as an output variable",
   source_file: "functions/get_reacji_text.ts",
   input_parameters: {
     properties: {
@@ -37,6 +37,7 @@ export default SlackFunction(
   GetReacjiText,
   async ({ client, inputs }) => {
     let originalMessageText = "";
+
     try {
       const messageHistoryResponse = await client.conversations.history({
         channel: inputs.the_channel_where_the_reacted_message_is_in,
@@ -48,10 +49,13 @@ export default SlackFunction(
       originalMessageText = messageHistoryResponse.messages[0].text;
       console.log("Original message:", originalMessageText);
     } catch (error) {
-      console.error("trying: client.conversations.history", error);
+      console.error(
+        "trying: client.conversations.history NOTE: Channel ID MUST BEGIN WITH A LETTER example: 'C123",
+        error,
+      );
     }
 
-    // Specifying these variables as output will allow them to be used by the next step in the workflow
+    // By specifying output variables, they can be utilized in the subsequent steps of the workflow.
     return {
       outputs: {
         original_message_text: originalMessageText,
